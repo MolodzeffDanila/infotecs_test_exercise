@@ -1,0 +1,34 @@
+.main-title{
+    text-align: center;
+}
+
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 50%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1vh;
+}
+
+th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1vh;
+}
+
+.td-ab{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+thead{
+    font-weight: bold;
+    background-color: #9c9c9c;
+    cursor: pointer;
+}
+
+
