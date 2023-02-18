@@ -1,27 +1,66 @@
+let fNameImgNosort = `<img id='firstName' class="img-tag" src='NoSort.png'>`;
+let lNameImgNosort = `<img id='lastName' class="img-tag" src='NoSort.png'>`;
+let aboutImgNosort = `<img id='about' class="img-tag" src='NoSort.png'>`;
+let eyeColorImgNosort = `<img id='eyeColor' class="img-tag" src='NoSort.png'>`;
+
 /*функция создания таблицы
     data -- данные для таблицы
     page -- текущая страница
+    fNameImg -- иконка для колонки "Имя"
+    lNameImg -- иконка для колонки "Фамилия"
+    aboutImg -- иконка для колонки "Описание"
+    eyeColorImg -- иконка для колонки "Цвет глаз"
 */
 
-function drawTable(data, page = 1){
-    let ans = "<table class='table-main'>" + //шапка таблицы
-        "<thead><tr>" +
-            "<td id='firstName'>Имя</td>" +
-            "<td id='lastName'>Фамилия</td>" +
-            "<td id='about'>Описание</td>" +
-            "<td id='eyeColor'>Цвет глаз</td>" +
-        "</thead></tr>";
+function drawTable(data,
+                   page = 1,
+                   fNameImg = fNameImgNosort,
+                   lNameImg = lNameImgNosort,
+                   aboutImg = aboutImgNosort,
+                   eyeColorImg= eyeColorImgNosort){
+    //шапка таблицы
+    let ans = "<table class='table-main'><thead><tr>"
+    if(!hiddenColumns.has("firstName")){
+        ans+="<td >"+`${fNameImg}` +"Имя</td>";
+    }
+    if(!hiddenColumns.has("lastName")){
+        ans+="<td >"+`${lNameImg}` +"Фамилия</td>";
+    }
+    if(!hiddenColumns.has("about")){
+        ans+="<td >"+`${aboutImg}` +"Описание</td>";
+    }
+    if(!hiddenColumns.has("eyeColor")){
+        ans+="<td >"+`${eyeColorImg}` +"Цвет глаз</td>"
+    }
+    ans+="</thead></tr>";
 
     let newData = data.slice((page-1)*10, page*10); //выбор текущей страницы
-    for(let item of newData){ //формирование строк таблицы
-        ans += "<tr id="+ item.id + ">" +
-            "<td>"+ item.name.firstName + "</td>" +
-            "<td>"+ item.name.lastName + "</td>" +
-            "<td><div class='td-ab'>"+ item.about + "</div></td>" +
-            "<td>"+ item.eyeColor + "</td>" +
-            "</tr>";
-    }
+    for(let i=0;i<newData.length;i++){
+        if(i%2){
+            ans += "<tr class='even-row' id="+ newData[i].id + ">"
+        }else{
+            ans += "<tr class='odd-row' id="+ newData[i].id + ">"
+        }
+        if(!hiddenColumns.has("firstName")){
+            ans+=`<td>${newData[i].name.firstName}</td>`;
+        }
+        if(!hiddenColumns.has("lastName")){
+            ans+=`<td>${newData[i].name.lastName}</td>`;
+        }
+        if(!hiddenColumns.has("about")){
+            ans+=`<td><div class='td-ab'>${newData[i].about}</div></td>`;
+        }
+        if(!hiddenColumns.has("eyeColor")){
+            ans+=`<td><div style='background-color: ${newData[i].eyeColor};` +
+                "height: 4vh; " +
+                "width: 4vh;" +
+                "border-radius: 2vh;" +
+                "margin: auto;'> </div></td>"
+        }
 
+
+         ans+= "</tr>";
+    }
     ans+="</table>"
     return  ans;
 }
@@ -56,36 +95,110 @@ function sortTable(col, data){
         }
         lastSorted = {col, dir: "right"}
     }
+    let imgIcon;
+    //Создание нужного
+    if(lastSorted.dir === "reversed"){
+        imgIcon = `<img id="${col}" class="img-tag" src='SortAZ.png'>`
+    }else{
+        imgIcon = `<img id="${col}" class="img-tag" src='SortZA.png'>`
+    }
 
-    let newTable = drawTable(data, page) // вызываем функцию для формирования таблицы
+    sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort];
+
+    let newTable;
+    // вызываем функцию для формирования таблицы в зависимости от сортировки
+    switch (col){
+        case "firstName":
+            sortingParams[0] = imgIcon
+            newTable = drawTable(data, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+            break;
+        case "lastName":
+            sortingParams[1] = imgIcon
+            newTable = drawTable(data, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+            break;
+        case "about":
+            sortingParams[2] = imgIcon
+            newTable = drawTable(data, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+            break;
+        case "eyeColor":
+            sortingParams[3] = imgIcon
+            newTable = drawTable(data, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+            break;
+    }
+
+
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
-
+    console.log(sortingParams)
     addListeners();
+
 }
 //Функция для создания EventListener'ов для сортировки
 function addListeners(){
     const firstName = document.getElementById("firstName");
-    firstName.addEventListener("click", function () {
+    firstName?.addEventListener("click", function () {
         sortTable(firstName.id,data_);
         }, false);
 
     const lastName = document.getElementById("lastName");
-    lastName.addEventListener("click", function () {
+    lastName?.addEventListener("click", function () {
         sortTable(lastName.id,data_);
         }, false);
 
     const about = document.getElementById("about");
-    about.addEventListener("click", function () {
+    about?.addEventListener("click", function () {
         sortTable(about.id,data_);
         }, false);
 
     const eyeColor = document.getElementById("eyeColor");
-    eyeColor.addEventListener("click", function () {
+    eyeColor?.addEventListener("click", function () {
         sortTable(eyeColor.id,data_);
         }, false);
 }
 
+//Функция определяет данные для текущей страницы
+function pagination(){
+    let newPage = drawTable(data_,page)
+
+    let table = document.getElementById('table-div');
+    table.innerHTML = newPage;
+
+    let pageNum = document.getElementById('page');
+    pageNum.innerHTML =" <h2 >"+page+"</h2>"
+
+    addListeners()
+}
+
+function lastPage(){
+    page = maxPage;
+
+    pagination()
+}
+
+function firstPage(){
+    page = 1;
+
+    pagination()
+}
+
+function nextPage(){
+    if(page<maxPage){
+        page++;
+
+        pagination()
+    }
+}
+
+function prevPage(){
+    if(page>1){
+        page--;
+
+        pagination()
+    }
+}
+
+let hiddenColumns = new Set();
+let sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort]
 // Создание таблицы с оригинальными данными
 let table = document.createElement('div')
 table.id = "table-div";
@@ -99,30 +212,61 @@ addListeners()
 let page = 1; //текущая страница
 let maxPage = Math.ceil(data_.length/10);
 
-function nextPage(){
-    if(page<maxPage){
-        page++;
-
-        let newPage = drawTable(data_,page)
-
-        let table = document.getElementById('table-div');
-        table.innerHTML = newPage;
-
-        let pageNum = document.getElementById('page');
-        pageNum.innerHTML =" <h2 >"+page+"</h2>"
+//Следующие 4 EventListener'a были вынесены из функции addListeners чтобы избежать их пересоздания
+// при перерисовке таблицы
+// Чекбоксы обозначают те колонки, которые будут скрыты
+const firstNameCheckbox = document.querySelector('#firstName-checkbox');
+firstNameCheckbox.addEventListener('change', () => {
+    if (firstNameCheckbox.checked) {
+        hiddenColumns.add(firstNameCheckbox.name)
+    } else {
+        hiddenColumns.delete(firstNameCheckbox.name)
     }
-}
+    let newTable = drawTable(data_, page,sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+    let div = document.getElementById("table-div"); //Перезаписываем таблицу
+    div.innerHTML = newTable;
 
-function prevPage(){
-    if(page>1){
-        page--;
+    addListeners();
+});
 
-        let newPage = drawTable(data_,page)
-
-        let table = document.getElementById('table-div');
-        table.innerHTML = newPage;
-
-        let pageNum = document.getElementById('page');
-        pageNum.innerHTML =" <h2>"+page+"</h2>"
+const lastNameCheckbox = document.querySelector('#lastName-checkbox');
+lastNameCheckbox.addEventListener('change', () => {
+    if (lastNameCheckbox.checked) {
+        hiddenColumns.add(lastNameCheckbox.name)
+    } else {
+        hiddenColumns.delete(lastNameCheckbox.name)
     }
-}
+    let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+    let div = document.getElementById("table-div"); //Перезаписываем таблицу
+    div.innerHTML = newTable;
+
+    addListeners();
+});
+
+const aboutCheckbox = document.querySelector('#about-checkbox');
+aboutCheckbox.addEventListener('change', () => {
+    if (aboutCheckbox.checked) {
+        hiddenColumns.add(aboutCheckbox.name)
+    } else {
+        hiddenColumns.delete(aboutCheckbox.name)
+    }
+    let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+    let div = document.getElementById("table-div"); //Перезаписываем таблицу
+    div.innerHTML = newTable;
+
+    addListeners();
+});
+
+const eyeColorCheckbox = document.querySelector('#eyeColor-checkbox');
+eyeColorCheckbox.addEventListener('change', () => {
+    if (eyeColorCheckbox.checked) {
+        hiddenColumns.add(eyeColorCheckbox.name)
+    } else {
+        hiddenColumns.delete(eyeColorCheckbox.name)
+    }
+    let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
+    let div = document.getElementById("table-div"); //Перезаписываем таблицу
+    div.innerHTML = newTable;
+
+    addListeners();
+});

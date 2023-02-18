@@ -8,10 +8,21 @@
 </head>
 <body>
     <h1 class="main-title">Test exercise for Infotecs.</h1>
+    <h3 class="checkboxes-title">Выберите колонки, которые хотите скрыть:</h3>
+    <div class="checkboxes">
+        <input type="checkbox" id="firstName-checkbox" name="firstName">
+        <label for="firstName-checkbox">Имя</label>
+        <input type="checkbox" id='lastName-checkbox' name="lastName">
+        <label for="lastName-checkbox" >Фамилия</label>
+        <input type="checkbox" id='about-checkbox' name="about">
+        <label for="about-checkbox">Описание</label>
+        <input type="checkbox" id='eyeColor-checkbox' name="eyeColor">
+        <label for="eyeColor-checkbox" >Цвет глаз</label>
+    </div>
     <script src="data.js"> </script>
     <script src="table.js"> </script>
     <div class="pagination-buttons-block">
-        <button class="pagination-button" onclick="prevPage()">
+        <button class="pagination-button" onclick="firstPage()">
             <<
         </button>
         <button class="pagination-button" onclick="prevPage()">
@@ -23,7 +34,7 @@
         <button class="pagination-button" onclick="nextPage()">
             >
         </button>
-        <button class="pagination-button" onclick="nextPage()">
+        <button class="pagination-button" onclick="lastPage()">
             >>
         </button>
     </div>

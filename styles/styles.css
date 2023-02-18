@@ -1,5 +1,27 @@
 .main-title{
     text-align: center;
+    margin-bottom: -2vh;
+    margin-top: -1vh;
+}
+
+.odd-row{
+    background-color: #e6e6e6;
+}
+
+thead{
+    font-size: 14pt;
+}
+
+.checkboxes-title{
+    display: -webkit-flex;
+    justify-content: center;
+
+}
+
+.checkboxes{
+    display: -webkit-flex;
+    justify-content: center;
+    margin-bottom: 1vh;
 }
 
 table{
@@ -15,6 +37,7 @@ table{
 th, td{
     border: 1px solid black;
     border-collapse: collapse;
+    min-width: 15vh;
     padding: 1vh;
 }
 
@@ -28,7 +51,9 @@ th, td{
 thead{
     font-weight: bold;
     background-color: #9c9c9c;
-    cursor: pointer;
 }
 
-
+.img-tag{
+    margin-right: 1vh;
+    cursor: pointer;
+}
