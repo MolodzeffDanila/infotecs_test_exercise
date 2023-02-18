@@ -1,5 +1,5 @@
 .main-title{
-    text-align: center;
+    margin-left: 15vh;
     margin-bottom: -2vh;
     margin-top: -1vh;
 }
@@ -12,26 +12,31 @@ thead{
     font-size: 14pt;
 }
 
+#table-div{
+    display: flex;
+}
+
+tbody tr:nth-child(odd){
+    background-color: #e6e6e6;
+}
+
 .checkboxes-title{
-    display: -webkit-flex;
-    justify-content: center;
+    margin-left: 15vh;
 
 }
 
 .checkboxes{
-    display: -webkit-flex;
-    justify-content: center;
+    margin-left: 15vh;
     margin-bottom: 1vh;
 }
 
 table{
-    border: 1px solid black;
     border-collapse: collapse;
     width: 50%;
     height: auto;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 15vh;
     padding: 1vh;
+    display: inline-block;
 }
 
 th, td{

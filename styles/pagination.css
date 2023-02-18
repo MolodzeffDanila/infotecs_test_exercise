@@ -1,7 +1,10 @@
 .pagination-buttons-block{
+    width: 50%;
     margin-top: 2vh;
     display: -webkit-flex;
-    justify-content: center;
+    justify-content: left;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pagination-button{

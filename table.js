@@ -3,6 +3,14 @@ let lNameImgNosort = `<img id='lastName' class="img-tag" src='NoSort.png'>`;
 let aboutImgNosort = `<img id='about' class="img-tag" src='NoSort.png'>`;
 let eyeColorImgNosort = `<img id='eyeColor' class="img-tag" src='NoSort.png'>`;
 
+function showModal(id = 'id') {
+    let modal = document.getElementById('modal-hidden');
+    console.log(modal);
+    modal.classList.remove('modal-hidden')
+    modal.classList.add('modal')
+    console.log(modal);
+}
+
 /*функция создания таблицы
     data -- данные для таблицы
     page -- текущая страница
@@ -36,11 +44,9 @@ function drawTable(data,
 
     let newData = data.slice((page-1)*10, page*10); //выбор текущей страницы
     for(let i=0;i<newData.length;i++){
-        if(i%2){
-            ans += "<tr class='even-row' id="+ newData[i].id + ">"
-        }else{
-            ans += "<tr class='odd-row' id="+ newData[i].id + ">"
-        }
+
+        ans += `<tr class='row' id="${newData[i].id}" onclick="showModal('${newData[i].id}')">`
+
         if(!hiddenColumns.has("firstName")){
             ans+=`<td>${newData[i].name.firstName}</td>`;
         }
@@ -96,11 +102,11 @@ function sortTable(col, data){
         lastSorted = {col, dir: "right"}
     }
     let imgIcon;
-    //Создание нужного
+    //Создание нужной иконки сортировки в шапке
     if(lastSorted.dir === "reversed"){
-        imgIcon = `<img id="${col}" class="img-tag" src='SortAZ.png'>`
+        imgIcon = `<img id="${col}" class="img-tag" src='SortAZ.png' alt="sort-icon">`
     }else{
-        imgIcon = `<img id="${col}" class="img-tag" src='SortZA.png'>`
+        imgIcon = `<img id="${col}" class="img-tag" src='SortZA.png' alt="sort-icon">`
     }
 
     sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort];
@@ -129,7 +135,7 @@ function sortTable(col, data){
 
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
-    console.log(sortingParams)
+    div.innerHTML +=createModal()
     addListeners();
 
 }
@@ -162,6 +168,7 @@ function pagination(){
 
     let table = document.getElementById('table-div');
     table.innerHTML = newPage;
+    table.innerHTML +=createModal()
 
     let pageNum = document.getElementById('page');
     pageNum.innerHTML =" <h2 >"+page+"</h2>"
@@ -197,6 +204,21 @@ function prevPage(){
     }
 }
 
+function createModal(){
+    let modal = "<div  id='modal-hidden' class='modal-hidden'>" +
+        "<form>" +
+            "<h3>Введите новые данные:</h3>" +
+            "<label>Имя</label><input type='text' id='first-name-input'></br>"+
+            "<label>Фамилия</label><input type='text' id='second-name-input'></br>" +
+            "<label>писание</label><input type='text' id='about-input'></br>"+
+            "<label>Цвет глаз</label><input type='text' id='eye-color-input'></br>" +
+            "<button>Отменить</button>"+
+            "<button>Сохранить</button>"+
+        "</form>" +
+    "</div>"
+    return modal
+}
+
 let hiddenColumns = new Set();
 let sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort]
 // Создание таблицы с оригинальными данными
@@ -204,6 +226,8 @@ let table = document.createElement('div')
 table.id = "table-div";
 table.innerHTML = drawTable(data_)
 document.body.append(table)
+
+table.innerHTML += createModal()
 
 let lastSorted = {col: "", dir: "right"} //объект, хранящий предыдущую сортировку(для обратной сортировки)
 
@@ -225,6 +249,7 @@ firstNameCheckbox.addEventListener('change', () => {
     let newTable = drawTable(data_, page,sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
+    div.innerHTML+=createModal()
 
     addListeners();
 });
@@ -239,6 +264,7 @@ lastNameCheckbox.addEventListener('change', () => {
     let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
+    div.innerHTML+=createModal()
 
     addListeners();
 });
@@ -253,6 +279,7 @@ aboutCheckbox.addEventListener('change', () => {
     let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
+    div.innerHTML+=createModal()
 
     addListeners();
 });
@@ -267,6 +294,7 @@ eyeColorCheckbox.addEventListener('change', () => {
     let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
+    div.innerHTML+=createModal()
 
     addListeners();
 });
