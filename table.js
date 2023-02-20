@@ -3,12 +3,41 @@ let lNameImgNosort = `<img id='lastName' class="img-tag" src='NoSort.png'>`;
 let aboutImgNosort = `<img id='about' class="img-tag" src='NoSort.png'>`;
 let eyeColorImgNosort = `<img id='eyeColor' class="img-tag" src='NoSort.png'>`;
 
-function showModal(id = 'id') {
+function showModal(id) {
     let modal = document.getElementById('modal-hidden');
-    console.log(modal);
     modal.classList.remove('modal-hidden')
     modal.classList.add('modal')
-    console.log(modal);
+    let currElem;
+    for(let item of data_){
+        if(item.id === id){
+            currElem = item;
+        }
+    }
+    const firstNameInput = document.querySelector('#first-name-input');
+    firstNameInput.value = currElem.name.firstName;
+    const lastNameInput = document.querySelector('#second-name-input');
+    lastNameInput.value = currElem.name.lastName;
+    const aboutInput = document.querySelector('#about-input');
+    aboutInput.value = currElem.about;
+    const eyeColorInput = document.querySelector('#eye-color-input');
+    eyeColorInput.value = currElem.eyeColor;
+
+    const submitButton = document.querySelector('#save-button');
+    submitButton.addEventListener('click', () => {
+        for(let item of data_){
+            if(item.id === id){
+                item.name.firstName = firstNameInput.value;
+                item.name.lastName = lastNameInput.value;
+                item.about = aboutInput.value;
+                item.eyeColor = eyeColorInput.value;
+            }
+        }
+        let newPage = drawTable(data_,page)
+
+        let table = document.getElementById('table-div');
+        table.innerHTML = newPage;
+        table.innerHTML +=createModal();
+    });
 }
 
 /*функция создания таблицы
@@ -45,7 +74,7 @@ function drawTable(data,
     let newData = data.slice((page-1)*10, page*10); //выбор текущей страницы
     for(let i=0;i<newData.length;i++){
 
-        ans += `<tr class='row' id="${newData[i].id}" onclick="showModal('${newData[i].id}')">`
+        ans += `<tr class='row' title='Редактировать' id="${newData[i].id}" onclick="showModal('${newData[i].id}')">`
 
         if(!hiddenColumns.has("firstName")){
             ans+=`<td>${newData[i].name.firstName}</td>`;
@@ -204,6 +233,21 @@ function prevPage(){
     }
 }
 
+function closeModal(){
+    //alert(data_[0].name.firstName + data_[0].name.lastName)
+    let modal = document.getElementById('modal-hidden');
+    modal.classList.remove('modal');
+    modal.classList.add('modal-hidden');
+
+    let newPage = drawTable(data_,page)
+
+    let table = document.getElementById('table-div');
+    table.innerHTML = newPage;
+    table.innerHTML +=createModal();
+
+    addListeners();
+}
+
 function createModal(){
     let modal = "<div  id='modal-hidden' class='modal-hidden'>" +
         "<form>" +
@@ -212,8 +256,8 @@ function createModal(){
             "<label>Фамилия</label><input type='text' id='second-name-input'></br>" +
             "<label>писание</label><input type='text' id='about-input'></br>"+
             "<label>Цвет глаз</label><input type='text' id='eye-color-input'></br>" +
-            "<button>Отменить</button>"+
-            "<button>Сохранить</button>"+
+            "<button id='cancel-button' onclick='closeModal()'>Отменить</button>"+
+            "<button id='save-button'>Сохранить</button>"+
         "</form>" +
     "</div>"
     return modal

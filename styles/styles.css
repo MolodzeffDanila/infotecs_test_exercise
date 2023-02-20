@@ -4,10 +4,6 @@
     margin-top: -1vh;
 }
 
-.odd-row{
-    background-color: #e6e6e6;
-}
-
 thead{
     font-size: 14pt;
 }
@@ -60,5 +56,9 @@ thead{
 
 .img-tag{
     margin-right: 1vh;
+    cursor: pointer;
+}
+
+.row{
     cursor: pointer;
 }
