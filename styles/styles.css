@@ -1,11 +1,11 @@
 .main-title{
-    margin-left: 15vh;
+    margin-left: 10vh;
     margin-bottom: -2vh;
     margin-top: -1vh;
 }
 
 thead{
-    font-size: 14pt;
+    font-size: 13pt;
 }
 
 #table-div{
@@ -16,13 +16,17 @@ tbody tr:nth-child(odd){
     background-color: #e6e6e6;
 }
 
+tbody tr:hover{
+    background-color: #b4b4b4;
+}
+
 .checkboxes-title{
-    margin-left: 15vh;
+    margin-left: 10vh;
 
 }
 
 .checkboxes{
-    margin-left: 15vh;
+    margin-left: 10vh;
     margin-bottom: 1vh;
 }
 
@@ -30,16 +34,14 @@ table{
     border-collapse: collapse;
     width: 50%;
     height: auto;
-    margin-left: 15vh;
-    padding: 1vh;
+    margin-left: 10vh;
     display: inline-block;
 }
 
 th, td{
     border: 1px solid black;
     border-collapse: collapse;
-    min-width: 15vh;
-    padding: 1vh;
+    padding: 0.5vh;
 }
 
 .td-ab{
@@ -62,3 +64,4 @@ thead{
 .row{
     cursor: pointer;
 }
+

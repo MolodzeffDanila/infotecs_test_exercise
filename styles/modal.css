@@ -1,12 +1,52 @@
 .modal-hidden{
+
     display: inline-block;
     visibility: hidden;
 }
 .modal{
     border: 1px solid black;
     margin-left: 20vh;
+    margin-top: 20vh;
     visibility: visible;
     display: inline-block;
     width: 60vh;
     height: 40vh;
+    padding: 1vh;
+    position: relative;
+}
+
+#first-name-input{
+    margin-top: 1vh;
+    margin-left: 6.1vh;
+}
+
+#second-name-input{
+    margin-top: 1vh;
+    margin-left: 1.5vh;
+}
+
+#about-input{
+    margin-top: 1vh;
+    margin-left: 1vh;
+}
+
+#eye-color-input{
+    margin-left: 1vh;
+}
+
+#buttons-modal{
+    position:absolute;
+    bottom:0;
+    margin-left: 30%;
+}
+
+#cancel-button{
+    margin-top: auto;
+    margin-right: 1vh;
+    margin-bottom: 1vh;
+}
+
+#save-button{
+    margin-bottom: 1vh;
+    margin-top: auto;
 }

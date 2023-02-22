@@ -3,13 +3,21 @@ let lNameImgNosort = `<img id='lastName' class="img-tag" src='NoSort.png'>`;
 let aboutImgNosort = `<img id='about' class="img-tag" src='NoSort.png'>`;
 let eyeColorImgNosort = `<img id='eyeColor' class="img-tag" src='NoSort.png'>`;
 
-function showModal(id) {
+let indexOfChange = 0;
+
+function onClickRow(id){
     let modal = document.getElementById('modal-hidden');
     modal.classList.remove('modal-hidden')
     modal.classList.add('modal')
+    indexOfChange = id;
+    showModal()
+}
+
+function showModal() {
+
     let currElem;
     for(let item of data_){
-        if(item.id === id){
+        if(item.id === indexOfChange){
             currElem = item;
         }
     }
@@ -25,19 +33,21 @@ function showModal(id) {
     const submitButton = document.querySelector('#save-button');
     submitButton.addEventListener('click', () => {
         for(let item of data_){
-            if(item.id === id){
+            if(item.id === indexOfChange){
                 item.name.firstName = firstNameInput.value;
                 item.name.lastName = lastNameInput.value;
                 item.about = aboutInput.value;
                 item.eyeColor = eyeColorInput.value;
             }
         }
-        let newPage = drawTable(data_,page)
+        let newPage = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3])
 
         let table = document.getElementById('table-div');
         table.innerHTML = newPage;
         table.innerHTML +=createModal();
-    });
+        addListeners()
+    }, {once: true});
+
 }
 
 /*функция создания таблицы
@@ -74,7 +84,7 @@ function drawTable(data,
     let newData = data.slice((page-1)*10, page*10); //выбор текущей страницы
     for(let i=0;i<newData.length;i++){
 
-        ans += `<tr class='row' title='Редактировать' id="${newData[i].id}" onclick="showModal('${newData[i].id}')">`
+        ans += `<tr class='row' title='Редактировать' id="${newData[i].id}" onclick="onClickRow('${newData[i].id}')">`
 
         if(!hiddenColumns.has("firstName")){
             ans+=`<td>${newData[i].name.firstName}</td>`;
@@ -93,6 +103,15 @@ function drawTable(data,
                 "margin: auto;'> </div></td>"
         }
 
+        let paginationBlock = document.querySelector(".pagination-buttons-block");
+        //Нелепая конструкция скрытия пагинации при скрытии всехстрок таблицы
+        if(paginationBlock){
+            if(hiddenColumns.size===4){
+                paginationBlock.style.visibility = "hidden";
+            }else{
+                paginationBlock.style.visibility = "visible";
+            }
+        }
 
          ans+= "</tr>";
     }
@@ -168,6 +187,7 @@ function sortTable(col, data){
     addListeners();
 
 }
+
 //Функция для создания EventListener'ов для сортировки
 function addListeners(){
     const firstName = document.getElementById("firstName");
@@ -193,7 +213,8 @@ function addListeners(){
 
 //Функция определяет данные для текущей страницы
 function pagination(){
-    let newPage = drawTable(data_,page)
+
+    let newPage = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
 
     let table = document.getElementById('table-div');
     table.innerHTML = newPage;
@@ -202,39 +223,58 @@ function pagination(){
     let pageNum = document.getElementById('page');
     pageNum.innerHTML =" <h2 >"+page+"</h2>"
 
-    addListeners()
+    addListeners();
 }
 
 function lastPage(){
     page = maxPage;
-
+    let button = document.querySelectorAll('.right')
+    button[0].style.visibility = 'hidden';
+    button[1].style.visibility = 'hidden';
     pagination()
 }
 
 function firstPage(){
     page = 1;
-
+    let button = document.querySelectorAll('.left')
+    button[0].style.visibility = 'hidden';
+    button[1].style.visibility = 'hidden';
     pagination()
 }
 
 function nextPage(){
     if(page<maxPage){
         page++;
-
-        pagination()
+        let button = document.querySelectorAll('.left')
+        button[0].style.visibility = 'visible';
+        button[1].style.visibility = 'visible';
+        if(page === maxPage){
+            console.log(page)
+            let button = document.querySelectorAll('.right')
+            button[0].style.visibility = 'hidden';
+            button[1].style.visibility = 'hidden';
+        }
+        pagination();
     }
 }
 
 function prevPage(){
     if(page>1){
         page--;
-
+        let button = document.querySelectorAll('.right');
+        button[0].style.visibility = 'visible';
+        button[1].style.visibility = 'visible';
+        if(page===1){
+            let button = document.querySelectorAll('.left')
+            button[0].style.visibility = 'hidden';
+            button[1].style.visibility = 'hidden';
+        }
         pagination()
     }
 }
 
 function closeModal(){
-    //alert(data_[0].name.firstName + data_[0].name.lastName)
+
     let modal = document.getElementById('modal-hidden');
     modal.classList.remove('modal');
     modal.classList.add('modal-hidden');
@@ -248,23 +288,35 @@ function closeModal(){
     addListeners();
 }
 
+function selectEyeColor(){
+    let ans = '<p>Выберите цвет глаз:</p><select id="eye-color-input"><option disabled value=\'\'>Выберите цвет глаз</option>'
+    for(let item of colors){
+        ans += `<option value='${item}'>${item}</option>`
+    }
+    ans += '</select></br>';
+    return ans;
+}
+
 function createModal(){
     let modal = "<div  id='modal-hidden' class='modal-hidden'>" +
         "<form>" +
             "<h3>Введите новые данные:</h3>" +
             "<label>Имя</label><input type='text' id='first-name-input'></br>"+
             "<label>Фамилия</label><input type='text' id='second-name-input'></br>" +
-            "<label>писание</label><input type='text' id='about-input'></br>"+
-            "<label>Цвет глаз</label><input type='text' id='eye-color-input'></br>" +
-            "<button id='cancel-button' onclick='closeModal()'>Отменить</button>"+
-            "<button id='save-button'>Сохранить</button>"+
+            "<label>Описание</label><input type='text' id='about-input'></br>"+
+            //selectEyeColor() +
+            "<p>Выберите цвет глаз:</p><input type='color' id='eye-color-input'>"+
+            "<div id='buttons-modal'><button id='cancel-button' onclick='closeModal()'>Отменить</button>"+
+            "<button id='save-button'>Сохранить</button></div>"+
         "</form>" +
     "</div>"
     return modal
 }
 
 let hiddenColumns = new Set();
-let sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort]
+let sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort];
+let colors = ['red','blue','brown','pink','green','grey'];
+
 // Создание таблицы с оригинальными данными
 let table = document.createElement('div')
 table.id = "table-div";
@@ -274,7 +326,6 @@ document.body.append(table)
 table.innerHTML += createModal()
 
 let lastSorted = {col: "", dir: "right"} //объект, хранящий предыдущую сортировку(для обратной сортировки)
-
 addListeners()
 
 let page = 1; //текущая страница
@@ -290,6 +341,7 @@ firstNameCheckbox.addEventListener('change', () => {
     } else {
         hiddenColumns.delete(firstNameCheckbox.name)
     }
+
     let newTable = drawTable(data_, page,sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
@@ -305,6 +357,7 @@ lastNameCheckbox.addEventListener('change', () => {
     } else {
         hiddenColumns.delete(lastNameCheckbox.name)
     }
+
     let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
@@ -320,6 +373,7 @@ aboutCheckbox.addEventListener('change', () => {
     } else {
         hiddenColumns.delete(aboutCheckbox.name)
     }
+
     let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
@@ -335,6 +389,7 @@ eyeColorCheckbox.addEventListener('change', () => {
     } else {
         hiddenColumns.delete(eyeColorCheckbox.name)
     }
+
     let newTable = drawTable(data_, page, sortingParams[0],sortingParams[1],sortingParams[2],sortingParams[3]);
     let div = document.getElementById("table-div"); //Перезаписываем таблицу
     div.innerHTML = newTable;
