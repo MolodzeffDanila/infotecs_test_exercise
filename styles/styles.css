@@ -6,6 +6,7 @@
 
 thead{
     font-size: 13pt;
+    cursor: pointer;
 }
 
 #table-div{
