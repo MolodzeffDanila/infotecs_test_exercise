@@ -32,12 +32,13 @@ tbody tr:hover{
 }
 
 table{
+    table-layout: inherit;
     border-collapse: collapse;
     width: 50%;
     height: auto;
     margin-left: 10vh;
-    display: inline-block;
 }
+
 
 th, td{
     border: 1px solid black;
@@ -55,6 +56,7 @@ th, td{
 thead{
     font-weight: bold;
     background-color: #9c9c9c;
+
 }
 
 .img-tag{
