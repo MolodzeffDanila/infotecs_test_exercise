@@ -46,7 +46,6 @@ function nextPage(){
         button[0].style.visibility = 'visible';
         button[1].style.visibility = 'visible';
         if(page === maxPage){
-            console.log(page)
             let button = document.querySelectorAll('.right')
             button[0].style.visibility = 'hidden';
             button[1].style.visibility = 'hidden';

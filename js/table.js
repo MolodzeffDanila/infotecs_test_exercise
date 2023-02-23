@@ -16,16 +16,16 @@ function drawTable(data,
     //шапка таблицы
     let ans = "<table class='table-main'><thead><tr>"
     if(!hiddenColumns.has("firstName")){
-        ans+="<td ><div id='firstName'>Имя</br>"+`${fNameImg}` +"</div></td>";
+        ans+="<th ><div id='firstName'>Имя</br>"+`${fNameImg}` +"</div></th>";
     }
     if(!hiddenColumns.has("lastName")){
-        ans+="<td ><div id='lastName'>Фамилия</br>"+`${lNameImg}` +"</div></td>";
+        ans+="<th ><div id='lastName'>Фамилия</br>"+`${lNameImg}` +"</div></th>";
     }
     if(!hiddenColumns.has("about")){
-        ans+="<td ><div id='about'>Описание</br>"+`${aboutImg}` +"</div></td>";
+        ans+="<th ><div id='about'>Описание</br>"+`${aboutImg}` +"</div></th>";
     }
     if(!hiddenColumns.has("eyeColor")){
-        ans+="<td ><div id='eyeColor'>Цвет глаз</br>"+`${eyeColorImg}` +"</div></td>"
+        ans+="<th ><div id='eyeColor'>Цвет глаз</br>"+`${eyeColorImg}` +"</div></th>"
     }
     ans+="</thead></tr>";
 
@@ -56,8 +56,33 @@ function drawTable(data,
         if(paginationBlock){
             if(hiddenColumns.size===4){
                 paginationBlock.style.visibility = "hidden";
+                let buttons = paginationBlock.getElementsByTagName('button')
+                for(let item of buttons){
+                    item.style.visibility = "hidden";
+                }
             }else{
                 paginationBlock.style.visibility = "visible";
+                if(page === maxPage){
+                    let buttons = paginationBlock.getElementsByClassName('right')
+                    buttons[0].style.visibility = 'hidden'
+                    buttons[1].style.visibility = 'hidden'
+                    buttons = paginationBlock.getElementsByClassName('left')
+                    buttons[0].style.visibility = 'visible'
+                    buttons[1].style.visibility = 'visible'
+                }else if(page === 1){
+                    let buttons = paginationBlock.getElementsByClassName('left')
+                    buttons[0].style.visibility = 'hidden'
+                    buttons[1].style.visibility = 'hidden'
+
+                    buttons = paginationBlock.getElementsByClassName('right')
+                    buttons[0].style.visibility = 'visible'
+                    buttons[1].style.visibility = 'visible'
+                }else{
+                    let buttons = paginationBlock.getElementsByTagName('button')
+                    for(let item of buttons){
+                        item.style.visibility = 'visible'
+                    }
+                }
             }
         }
 
@@ -102,9 +127,9 @@ function sortTable(col, data){
     //Если до этого была обратная сортировка, то создаем иконку для прямого порядка
     //Иначе для обратного
     if(lastSorted.dir === "reversed"){
-        imgIcon = `<img id="${col}" class="img-tag" src='../static/SortAZ.png' alt="sort-icon">`
+        imgIcon = `<img id="${col}" class="img-tag" src='./static/SortAZ.png' alt="sort-icon">`
     }else{
-        imgIcon = `<img id="${col}" class="img-tag" src='../static/SortZA.png' alt="sort-icon">`
+        imgIcon = `<img id="${col}" class="img-tag" src='./static/SortZA.png' alt="sort-icon">`
     }
 
     sortingParams = [fNameImgNosort,lNameImgNosort,aboutImgNosort,eyeColorImgNosort];
@@ -163,10 +188,10 @@ function addListeners(){
 }
 
 //Константные строки, обозначающие страндартные иконки
-let fNameImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
-let lNameImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
-let aboutImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
-let eyeColorImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
+let fNameImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
+let lNameImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
+let aboutImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
+let eyeColorImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
 
 //ИД редактируемой строки таблицы
 let indexOfChange = 0;
