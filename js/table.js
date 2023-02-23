@@ -163,10 +163,10 @@ function addListeners(){
 }
 
 //Константные строки, обозначающие страндартные иконки
-let fNameImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
-let lNameImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
-let aboutImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
-let eyeColorImgNosort = `<img class="img-tag" src='../static/NoSort.png'>`;
+let fNameImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
+let lNameImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
+let aboutImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
+let eyeColorImgNosort = `<img class="img-tag" src='./static/NoSort.png'>`;
 
 //ИД редактируемой строки таблицы
 let indexOfChange = 0;
